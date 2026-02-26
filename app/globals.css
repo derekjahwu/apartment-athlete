@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-bebas: 'Bebas Neue', sans-serif;
+  --font-dm-sans: 'DM Sans', sans-serif;
+  --font-dm-serif: 'DM Serif Display', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0a0a0a;
+  color: #f5f4f0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* Ticker animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 25s linear infinite;
+}
+
+/* Fade up animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Workout card hover */
+.workout-card:hover .workout-card-bg {
+  transform: scale(1.05);
+  filter: brightness(0.35) !important;
+}
+
+.workout-card:hover .workout-cta {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.workout-card-bg {
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.workout-cta {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+}
+
+/* Phil item hover */
+.phil-item:hover {
+  background: #1f1f1f;
+}
+
+.phil-item:hover .phil-num {
+  color: #e8521a;
+}
+
+.phil-num {
+  transition: color 0.3s;
+}
+
+.phil-item {
+  transition: background 0.3s;
+}
+
+/* Testi card hover */
+.testi-card {
+  border-top: 3px solid #2a2a2a;
+  transition: border-color 0.3s;
+}
+
+.testi-card:hover {
+  border-color: #e8521a;
+}
+
+/* View all link */
+.view-all:hover {
+  gap: 14px !important;
+}
+
+/* Btn primary hover */
+.btn-primary:hover {
+  background: #ff6b35;
+}
