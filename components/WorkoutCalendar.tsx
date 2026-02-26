@@ -441,7 +441,6 @@ export default function WorkoutCalendar() {
             <div style={{
               position: 'absolute',
               left: '50%',
-              transform: 'translateX(-50%)',
               ...(tooltip.placement === 'below' ? { top: '-5px' } : { bottom: '-5px' }),
               width: '8px',
               height: '8px',
