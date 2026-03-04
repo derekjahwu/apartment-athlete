@@ -1,8 +1,11 @@
 {
+  "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/articles/page": "app/articles/page.js",
   "/articles/[slug]/page": "app/articles/[slug]/page.js",
+  "/articles/page": "app/articles/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
+  "/sign-in/[[...sign-in]]/page": "app/sign-in/[[...sign-in]]/page.js",
+  "/sign-up/[[...sign-up]]/page": "app/sign-up/[[...sign-up]]/page.js",
   "/workout/[slug]/page": "app/workout/[slug]/page.js"
 }

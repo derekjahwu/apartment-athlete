@@ -2,17 +2,18 @@
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/AuthContext'
+// import { useAuth } from '@/lib/AuthContext'
 import { WORKOUTS, TYPE_COLORS, getWorkout, getDaysInMonth, getFirstDay } from '@/lib/workouts'
 import { MONTHS, DAY_LABELS, ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
 import { todayKey, computeStreak } from '@/lib/user'
 import { OBtn, Lbl } from '@/components/ui/primitives'
+import { Show, useAuth } from '@clerk/nextjs'
 
 interface CalendarGateProps {
   onOpenAuth: () => void
 }
 
-function CalendarGate({ onOpenAuth }: CalendarGateProps) {
+function CalendarGate() {
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(10,10,10,0.65)', backdropFilter: 'blur(12px)' }}>
       <div style={{ textAlign: 'center', padding: '40px 52px', background: SURFACE, border: `1px solid ${BORDER}`, maxWidth: 400, animation: 'fadeUp 0.3s ease' }}>
@@ -24,10 +25,10 @@ function CalendarGate({ onOpenAuth }: CalendarGateProps) {
         <p style={{ fontSize: 12.5, color: MUTED, lineHeight: 1.65, marginBottom: 28 }}>
           Create a free account to access personalized daily workouts, track your streak, and log every session.
         </p>
-        <OBtn onClick={onOpenAuth} style={{ width: '100%', padding: '13px', fontSize: 11, marginBottom: 12 }}>
+        <OBtn>
           Create Free Account →
         </OBtn>
-        <div onClick={onOpenAuth} style={{ fontSize: 11.5, color: DIM, cursor: 'pointer', letterSpacing: '0.04em' }}>
+        <div>
           Already a member? <span style={{ color: ORANGE, fontWeight: 700 }}>Sign in</span>
         </div>
       </div>
@@ -64,8 +65,8 @@ function workoutSlug(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
-  const { user, workoutLog, logWorkout } = useAuth()
+export default function WorkoutCalendar() {
+  const { isSignedIn } = useAuth()
   const router = useRouter()
   const today = new Date()
   const [month, setMonth] = useState(today.getMonth())
@@ -79,9 +80,9 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
   const dim = getDaysInMonth(year, month)
   const first = getFirstDay(year, month)
   const isCurMonth = month === today.getMonth() && year === today.getFullYear()
-  const logSet = new Set(workoutLog)
-  const streak = computeStreak(workoutLog)
-  const todayLogged = logSet.has(todayKey())
+  // const logSet = new Set(workoutLog)
+  // const streak = computeStreak(workoutLog)
+  const todayLogged = false
 
   function handleCellEnter(e: React.MouseEvent<HTMLDivElement>, day: number) {
     setHovered(day)
@@ -92,11 +93,11 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
     setTooltip({ day, x: rect.left - par.left + rect.width / 2, y: placement === 'below' ? rect.bottom - par.top + 6 : rect.top - par.top - 6, placement })
   }
 
-  function handleLogToday() {
-    logWorkout()
-    setJustLogged(true)
-    setTimeout(() => setJustLogged(false), 2500)
-  }
+  // function handleLogToday() {
+  //   logWorkout()
+  //   setJustLogged(true)
+  //   setTimeout(() => setJustLogged(false), 2500)
+  // }
 
   const prevMonth = () => { if (month === 0) { setMonth(11); setYear(y => y - 1) } else setMonth(m => m - 1); setTooltip(null) }
   const nextMonth = () => { if (month === 11) { setMonth(0); setYear(y => y + 1) } else setMonth(m => m + 1); setTooltip(null) }
@@ -121,7 +122,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
           </h2>
           <p style={{ marginTop: 12, fontSize: 12.5, color: DIM, maxWidth: 480 }}>Hover any day to preview. Click to lock in full details.</p>
         </div>
-        {user && streak > 0 && (
+        {/* {isSignedIn && streak > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px', background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)' }}>
             <span style={{ fontSize: 22 }}>🔥</span>
             <div>
@@ -129,13 +130,26 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               <div style={{ fontSize: 8.5, color: DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>day streak</div>
             </div>
           </div>
+        )} */}
+        {isSignedIn && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px', background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)' }}>
+            <span style={{ fontSize: 22 }}>🔥</span>
+            <div>
+              <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 24, color: ORANGE, lineHeight: 1 }}>streak</div>
+              <div style={{ fontSize: 8.5, color: DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>day streak</div>
+            </div>
+          </div>
         )}
       </div>
 
       <div style={{ position: 'relative' }}>
-        {!user && <CalendarGate onOpenAuth={onOpenAuth} />}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', filter: user ? 'none' : 'blur(4px)', pointerEvents: user ? 'auto' : 'none', userSelect: user ? 'auto' : 'none' }}>
+          {/* <Show when="signed-out">
+        {!isSignedIn && <CalendarGate />}
+          </Show> */}
+
+        {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', filter: isSignedIn ? 'none' : 'blur(4px)', pointerEvents: isSignedIn ? 'auto' : 'none', userSelect: isSignedIn ? 'auto' : 'none' }}> */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', userSelect: isSignedIn ? 'auto' : 'none' }}>
           {/* Calendar grid */}
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', borderBottom: `1px solid ${BORDER}` }}>
@@ -158,7 +172,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
                 const c = TYPE_COLORS[w.type]
                 const isToday = isCurMonth && day === today.getDate()
                 const isSel = day === selected
-                const isDone = logSet.has(`${year}-${month}-${day}`)
+                const isDone = false
                 return (
                   <div
                     key={day}
@@ -222,18 +236,18 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {isCurMonth && selected === today.getDate() && (
                   <button
-                    onClick={handleLogToday}
+                    // onClick={handleLogToday}
                     style={{ width: '100%', padding: '12px', background: '#1a2e1a', border: `1px solid ${todayLogged || justLogged ? '#82d296' : '#2a4a2a'}`, color: '#82d296', fontSize: 9.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', cursor: todayLogged ? 'default' : 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
                   >
                     {justLogged ? '✓ Logged!' : todayLogged ? '✓ Completed Today' : 'Log This Workout ✓'}
                   </button>
                 )}
-                <OBtn
-                  onClick={() => user ? router.push(`/workout/${workoutSlug(pw.name)}`) : onOpenAuth()}
+                {/* <OBtn
+              
                   style={{ width: '100%', padding: '12px', fontSize: 9.5 }}
                 >
-                  {user ? 'Start This Workout →' : 'Sign In to Start'}
-                </OBtn>
+                  {isSignedIn ? 'Start This Workout →' : 'Sign In to Start'}
+                </OBtn> */}
               </div>
             </div>
 
@@ -253,7 +267,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       </div>
 
       {/* Tooltip */}
-      {tooltip && user && (() => {
+      {tooltip && isSignedIn && (() => {
         const w = getWorkout(tooltip.day)
         const c = TYPE_COLORS[w.type]
         const isBelow = tooltip.placement === 'below'

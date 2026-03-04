@@ -1,17 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { useAuth } from '@/lib/AuthContext'
+
 import { getWorkout } from '@/lib/workouts'
 import { ORANGE, TEXT, BORDER } from '@/lib/constants'
 import { OBtn, Lbl } from '@/components/ui/primitives'
+import HeroImage from 'next/image'
+
 
 interface HeroProps {
   onOpenAuth: () => void
 }
 
-export default function Hero({ onOpenAuth }: HeroProps) {
-  const { user } = useAuth()
+export default function Hero() {
+  // const { user } = useAuth()
   const [sent, setSent] = useState(false)
   const todayWorkout = getWorkout(new Date().getDate())
 
@@ -43,7 +45,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           Your living room is your performance lab.
         </p>
 
-        {user ? (
+        {/* {user ? (
           <div style={{ padding: '16px 20px', background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)', maxWidth: 380 }}>
             <div style={{ fontSize: 9, color: ORANGE, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>
               Welcome back, {user.name.split(' ')[0]}
@@ -68,14 +70,14 @@ export default function Hero({ onOpenAuth }: HeroProps) {
             </div>
             <p style={{ marginTop: 10, fontSize: 10, color: '#555' }}>Join 47,000+ apartment athletes. No spam.</p>
           </>
-        )}
+        )} */}
       </div>
 
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <div
           style={{
             position: 'absolute', inset: 0,
-            backgroundImage: "url('https://images.unsplash.com/photo-1571019613914-85f342c6a11e?w=800&q=80')",
+            backgroundImage: "url('/img/5132824-man-2264825_1920.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

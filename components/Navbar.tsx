@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth } from '@/lib/AuthContext'
+// import { useAuth } from '@/lib/AuthContext'
 import { ORANGE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
 import { OBtn } from '@/components/ui/primitives'
+import { UserButton, useAuth, UserAvatar, SignOutButton, useUser  } from '@clerk/nextjs'
+
 
 interface NavbarProps {
   onOpenAuth: () => void
@@ -13,7 +15,7 @@ interface NavbarProps {
 
 function NavLink({ href, children, active }: { href: string; children: React.ReactNode; active?: boolean }) {
   const [hov, setHov] = useState(false)
-  return (
+  return ( 
     <Link
       href={href}
       onMouseEnter={() => setHov(true)}
@@ -37,10 +39,14 @@ function NavLink({ href, children, active }: { href: string; children: React.Rea
 }
 
 export default function Navbar({ onOpenAuth }: NavbarProps) {
-  const { user, logout } = useAuth()
+  // const { user, logout } = useAuth()
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+    const { isSignedIn } = useAuth()
+    const { user } = useUser()
+
+
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 20) }
@@ -92,10 +98,9 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
 
       <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
         <NavLink href="/#workouts" active={pathname === '/'}>Workouts</NavLink>
-        <NavLink href="/#training" active={false}>Training</NavLink>
         <NavLink href="/articles" active={pathname === '/articles'}>Articles</NavLink>
 
-        {user ? (
+        {/* {isSignedIn ? (
           <div data-user-menu style={{ position: 'relative' }}>
             <div
               onClick={() => setMenuOpen(m => !m)}
@@ -125,10 +130,10 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
                   flexShrink: 0,
                 }}
               >
-                {user.avatar}
+                <UserAvatar />
               </div>
               <span style={{ fontSize: 10, color: TEXT, fontWeight: 600, letterSpacing: '0.05em' }}>
-                {user.name.split(' ')[0]}
+                {user?.fullName}
               </span>
               <span style={{ fontSize: 8, color: DIM }}>▾</span>
             </div>
@@ -148,13 +153,14 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
               >
                 <DropItem href="/dashboard" onClick={() => setMenuOpen(false)}>⬛ Dashboard</DropItem>
                 <DropItem href="/dashboard" onClick={() => setMenuOpen(false)}>★ Saved Articles</DropItem>
+                <SignOutButton redirectUrl="/">
                 <DropItem
-                  onClick={() => { logout(); setMenuOpen(false) }}
                   color="#ff6b6b"
                   hoverColor="#ff4444"
                 >
                   ↩ Sign Out
                 </DropItem>
+                </SignOutButton>
               </div>
             )}
           </div>
@@ -167,8 +173,11 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
             <Link href="/sign-up">
             <OBtn small>Join Free</OBtn>
             </Link>
+
+            <UserButton />
+
           </div>
-        )}
+        )} */}
       </div>
     </nav>
   )
