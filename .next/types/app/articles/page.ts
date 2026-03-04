@@ -1,4 +1,4 @@
-// File: E:\development\Apartment Athlete\apartment-athlete-v2\app\articles\page.tsx
+// File: E:\development\Apartment Athlete\apartment-athlete-master\app\articles\page.tsx
 import * as entry from '../../../../app/articles/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

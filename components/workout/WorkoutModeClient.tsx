@@ -552,7 +552,6 @@ export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) 
       {phase !== 'complete' && (
         <div style={{ background: BG, minHeight: 'calc(100vh - 56px)', position: 'relative' }}>
           {/* Auth gate */}
-          {!user && <AuthGate onOpenAuth={openAuth} />}
 
           {/* Progress bar */}
           <div style={{ height: 3, background: '#1a1a1a', position: 'sticky', top: 56, zIndex: 30 }}>
@@ -567,9 +566,7 @@ export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) 
             maxWidth: 760,
             margin: '0 auto',
             padding: '48px 24px 80px',
-            filter: !user ? 'blur(5px)' : 'none',
-            pointerEvents: !user ? 'none' : 'auto',
-            userSelect: !user ? 'none' : 'auto',
+            pointerEvents:'auto',
             transition: 'filter 0.3s',
           }}>
             {/* Header */}

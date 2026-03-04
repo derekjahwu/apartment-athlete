@@ -92,10 +92,10 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
 
       <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
         <NavLink href="/#workouts" active={pathname === '/'}>Workouts</NavLink>
-        <NavLink href="/#training" active={false}>Training</NavLink>
+        {/* <NavLink href="/#training" active={false}>Training</NavLink> */}
         <NavLink href="/articles" active={pathname === '/articles'}>Articles</NavLink>
 
-        {user ? (
+        {/* {user ? (
           <div data-user-menu style={{ position: 'relative' }}>
             <div
               onClick={() => setMenuOpen(m => !m)}
@@ -163,7 +163,7 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
             <OBtn outline small onClick={onOpenAuth}>Sign In</OBtn>
             <OBtn small onClick={onOpenAuth}>Join Free</OBtn>
           </div>
-        )}
+        )} */}
       </div>
     </nav>
   )

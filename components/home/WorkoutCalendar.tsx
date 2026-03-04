@@ -4,9 +4,10 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/AuthContext'
 import { WORKOUTS, TYPE_COLORS, getWorkout, getDaysInMonth, getFirstDay } from '@/lib/workouts'
-import { MONTHS, DAY_LABELS, ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
+import { MONTHS, DAY_LABELS, ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG, ORANGE_HOV } from '@/lib/constants'
 import { todayKey, computeStreak } from '@/lib/user'
 import { OBtn, Lbl } from '@/components/ui/primitives'
+import Link from 'next/dist/client/link'
 
 interface CalendarGateProps {
   onOpenAuth: () => void
@@ -133,9 +134,9 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       </div>
 
       <div style={{ position: 'relative' }}>
-        {!user && <CalendarGate onOpenAuth={onOpenAuth} />}
+        {/* {!user && <CalendarGate onOpenAuth={onOpenAuth} />} */}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', filter: user ? 'none' : 'blur(4px)', pointerEvents: user ? 'auto' : 'none', userSelect: user ? 'auto' : 'none' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', filter: 'none', pointerEvents:'auto', userSelect:'auto'}}>
           {/* Calendar grid */}
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', borderBottom: `1px solid ${BORDER}` }}>
@@ -220,20 +221,30 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               </div>
 
               <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {isCurMonth && selected === today.getDate() && (
+                {/* {isCurMonth && selected === today.getDate() && (
                   <button
                     onClick={handleLogToday}
                     style={{ width: '100%', padding: '12px', background: '#1a2e1a', border: `1px solid ${todayLogged || justLogged ? '#82d296' : '#2a4a2a'}`, color: '#82d296', fontSize: 9.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', cursor: todayLogged ? 'default' : 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
                   >
                     {justLogged ? '✓ Logged!' : todayLogged ? '✓ Completed Today' : 'Log This Workout ✓'}
                   </button>
-                )}
-                <OBtn
-                  onClick={() => user ? router.push(`/workout/${workoutSlug(pw.name)}`) : onOpenAuth()}
-                  style={{ width: '100%', padding: '12px', fontSize: 9.5 }}
-                >
-                  {user ? 'Start This Workout →' : 'Sign In to Start'}
-                </OBtn>
+                )} */}
+                <Link href={`/workout/${workoutSlug(pw.name)}`}     style={{
+                        padding: '11px 22px',
+                        background: ORANGE_HOV,
+                        color: "#ffffff",
+                        border: `1px solid ${ORANGE}`,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase' as const,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        fontFamily: 'inherit',
+                        textAlign: 'center',
+                      }}>
+                  Start This Workout →
+                </Link>
               </div>
             </div>
 
