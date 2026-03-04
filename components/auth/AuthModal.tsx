@@ -4,6 +4,14 @@ import { useState } from 'react'
 import { useAuth } from '@/lib/AuthContext'
 import { OBtn, TextInput } from '@/components/ui/primitives'
 import { ORANGE, SURFACE, BORDER, DIM, TEXT } from '@/lib/constants'
+import {
+  ClerkProvider,
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from '@clerk/nextjs'
+import { Sign } from 'crypto'
 
 interface AuthModalProps {
   onClose: () => void
@@ -117,33 +125,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
         {/* OAuth */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-          {OAUTH_PROVIDERS.map(p => (
-            <button
-              key={p.name}
-              onClick={() => handleOAuth(p.name)}
-              onMouseEnter={e => { (e.currentTarget.style.borderColor = p.color) }}
-              onMouseLeave={e => { (e.currentTarget.style.borderColor = BORDER) }}
-              style={{
-                flex: 1,
-                padding: '10px 8px',
-                background: '#1f1f1f',
-                border: `1px solid ${BORDER}`,
-                color: p.color,
-                fontSize: 11.5,
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'border-color 0.2s',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 6,
-                fontFamily: 'inherit',
-              }}
-            >
-              <span style={{ fontSize: 14, lineHeight: 1 }}>{p.icon}</span>
-              {p.name}
-            </button>
-          ))}
+          <SignInButton />
         </div>
 
         {/* Divider */}
@@ -205,6 +187,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           By continuing you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
+      
     </div>
   )
 }

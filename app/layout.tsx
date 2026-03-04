@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, DM_Sans, DM_Serif_Display } from 'next/font/google'
 import { AuthProvider } from '@/lib/AuthContext'
 import AppShell from '@/components/AppShell'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${bebasNeue.variable} ${dmSans.variable} ${dmSerifDisplay.variable}`}>
         <AuthProvider>
+          <ClerkProvider>
           <AppShell>{children}</AppShell>
+          </ClerkProvider>
         </AuthProvider>
       </body>
     </html>

@@ -160,8 +160,13 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
           </div>
         ) : (
           <div style={{ display: 'flex', gap: 8 }}>
-            <OBtn outline small onClick={onOpenAuth}>Sign In</OBtn>
-            <OBtn small onClick={onOpenAuth}>Join Free</OBtn>
+            <Link href="/sign-in">
+            <OBtn outline small>Sign In</OBtn>
+            </Link>
+
+            <Link href="/sign-up">
+            <OBtn small>Join Free</OBtn>
+            </Link>
           </div>
         )}
       </div>
