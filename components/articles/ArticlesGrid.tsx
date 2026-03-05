@@ -1,11 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/lib/AuthContext'
 import { ARTICLES, ARTICLE_CATEGORIES, type Article, type ArticleCategory } from '@/lib/articles'
 import { FULL_ARTICLES } from '@/lib/articleContent'
 import { ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(0)
+  useEffect(() => {
+    setWidth(window.innerWidth)
+    const handler = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+  return width
+}
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -25,8 +36,11 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
   onToggleSave: (slug: string) => void
 }) {
   const [hov, setHov] = useState(false)
+  const width = useWindowWidth()
+  const isMobile = width > 0 && width < 640
   const isReview = article.category === 'reviews'
   const hasFullPage = article.slug in FULL_ARTICLES
+  const stackFeatured = featured && isMobile
 
   const inner = (
     <div
@@ -35,7 +49,7 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
       style={{
         background: SURFACE,
         display: 'flex',
-        flexDirection: featured ? 'row' : 'column',
+        flexDirection: (featured && !isMobile) ? 'row' : 'column',
         border: `1px solid ${hov ? ORANGE : BORDER}`,
         transition: 'border-color 0.25s',
         overflow: 'hidden',
@@ -64,9 +78,9 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
       {/* Image */}
       <div style={{
         position: 'relative', flexShrink: 0,
-        width: featured ? '42%' : '100%',
-        aspectRatio: featured ? 'auto' : '16/9',
-        minHeight: featured ? 250 : 'auto',
+        width: (featured && !isMobile) ? '42%' : '100%',
+        aspectRatio: stackFeatured ? '16/9' : (featured ? 'auto' : '16/9'),
+        minHeight: (featured && !isMobile) ? 250 : 'auto',
         overflow: 'hidden',
       }}>
         <div style={{
@@ -102,12 +116,12 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
       </div>
 
       {/* Content */}
-      <div style={{ padding: featured ? '32px 36px' : '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
+      <div style={{ padding: (featured && !isMobile) ? '32px 36px' : '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
         <div>
           {isReview && article.rating && (
             <div style={{ marginBottom: 10 }}><StarRating rating={article.rating} /></div>
           )}
-          <h3 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: featured ? 19 : 14.5, lineHeight: 1.35, color: TEXT, marginBottom: 10 }}>
+          <h3 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: (featured && !isMobile) ? 19 : 14.5, lineHeight: 1.35, color: TEXT, marginBottom: 10 }}>
             {article.title}
           </h3>
           <p style={{ fontSize: 12, color: '#777', lineHeight: 1.7, marginBottom: 16 }}>{article.excerpt}</p>
@@ -150,6 +164,9 @@ export default function ArticlesGrid() {
   const [activeCat, setActiveCat] = useState<ArticleCategory>('all')
   const [search, setSearch] = useState('')
   const [focused, setFocused] = useState(false)
+  const width = useWindowWidth()
+  const isMobile = width > 0 && width < 640
+  const isTablet = width >= 640 && width < 1024
 
   const filtered = ARTICLES.filter(a => {
     const mc = activeCat === 'all' || a.category === activeCat
@@ -161,11 +178,13 @@ export default function ArticlesGrid() {
   const featured = filtered.filter(a => a.featured)
   const rest = filtered.filter(a => !a.featured)
 
+  const gridCols = isMobile ? '1fr' : isTablet ? 'repeat(2,1fr)' : 'repeat(3,1fr)'
+
   return (
-    <div style={{ background: BG, padding: '52px 56px 88px' }}>
+    <div style={{ background: BG, padding: isMobile ? '32px 20px 60px' : isTablet ? '40px 32px 72px' : '52px 56px 88px' }}>
       {/* Filter bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 44, flexWrap: 'wrap', gap: 16 }}>
-        <div style={{ display: 'flex', gap: 2 }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between', marginBottom: 44, gap: 16 }}>
+        <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           {ARTICLE_CATEGORIES.map(cat => {
             const active = activeCat === cat.value
             return (
@@ -187,7 +206,7 @@ export default function ArticlesGrid() {
             onChange={e => setSearch(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            style={{ width: 240, padding: '9px 14px 9px 34px', background: SURFACE, border: `1px solid ${focused ? ORANGE : BORDER}`, color: TEXT, fontSize: 12, outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
+            style={{ width: isMobile ? '100%' : 240, boxSizing: 'border-box', padding: '9px 14px 9px 34px', background: SURFACE, border: `1px solid ${focused ? ORANGE : BORDER}`, color: TEXT, fontSize: 12, outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
           />
         </div>
       </div>
@@ -214,7 +233,7 @@ export default function ArticlesGrid() {
               {featured.length > 0 && (
                 <div style={{ fontSize: 8.5, letterSpacing: '0.26em', textTransform: 'uppercase', color: '#444', fontWeight: 700, marginBottom: 16 }}>More Articles</div>
               )}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 2 }}>
                 {rest.map(a => (
                   <ArticleCard key={a.slug} article={a} isSaved={savedArticles.includes(a.slug)} onToggleSave={toggleSave} />
                 ))}

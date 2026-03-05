@@ -49,13 +49,13 @@ function PhilCard({ n, title, text }: { n: string; title: string; text: string }
 
 export function Philosophy() {
   return (
-    <section style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, padding: '64px 56px' }}>
+    <section className="px-6 py-12 sm:px-14 sm:py-16" style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
       <Lbl>Our Philosophy</Lbl>
       <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', color: TEXT, marginBottom: 40, lineHeight: 1 }}>
         Built on{' '}
         <em style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', color: ORANGE }}>Three Rules</em>
       </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5">
         <PhilCard n="01" title="Minimum Effective Dose" text="The right 25-minute session done consistently beats the perfect workout you never do." />
         <PhilCard n="02" title="Space is Never the Excuse" text="Arms outstretched = enough room. Every program tested in an actual apartment." />
         <PhilCard n="03" title="Progress Beats Perfection" text="Track consistency, strength gains, and how you feel — not macros to three decimal places." />
@@ -89,8 +89,8 @@ function WorkoutCard({ tag, name, meta, img }: { tag: string; name: string; meta
 
 export function Workouts() {
   return (
-    <section id="workouts" style={{ background: '#0a0a0a', padding: '64px 56px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }}>
+    <section id="workouts" className="px-6 py-12 sm:px-14 sm:py-16" style={{ background: '#0a0a0a' }}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-9">
         <div>
           <Lbl>Train Today</Lbl>
           <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', color: TEXT, lineHeight: 1 }}>
@@ -100,7 +100,7 @@ export function Workouts() {
         </div>
         <span style={{ fontSize: 10, color: ORANGE, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, cursor: 'pointer' }}>View All Workouts</span>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0.5">
         <WorkoutCard tag="Strength" name="Full Body Blitz" meta="30 min · Intermediate · No Equipment" img="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=500&q=80&fit=crop" />
         <WorkoutCard tag="Cardio"   name="Silent HIIT"     meta="20 min · All Levels · Neighbor-Safe"  img="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=500&q=80&fit=crop" />
         <WorkoutCard tag="Recovery" name="Mobility Reset"  meta="15 min · Beginner · Mat Only"         img="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80&fit=crop" />
@@ -113,12 +113,13 @@ export function Workouts() {
 
 export function FeaturedGuide() {
   return (
-    <section style={{ background: SURFACE, display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-      <div style={{ position: 'relative', minHeight: 380 }}>
+    <section className="grid grid-cols-1 md:grid-cols-2" style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <div className="relative h-56 md:h-auto" style={{ minHeight: 'unset' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
-        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right,transparent 50%,${SURFACE})` }} />
+        <div className="hidden md:block" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right,transparent 50%,${SURFACE})` }} />
+        <div className="block md:hidden" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top,${SURFACE} 0%,transparent 60%)` }} />
       </div>
-      <div style={{ padding: '60px 52px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div className="px-6 py-10 sm:px-12 sm:py-16 flex flex-col justify-center">
         <Lbl>Featured Guide</Lbl>
         <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: 24, lineHeight: 1.3, color: TEXT, marginBottom: 18 }}>
           The Apartment Athlete Starter Kit: Build Serious Muscle Without a Single Weight
@@ -157,14 +158,14 @@ function TestiCard({ initials, name, role, quote }: { initials: string; name: st
 
 export function Testimonials() {
   return (
-    <section style={{ background: '#0a0a0a', padding: '64px 56px', borderTop: `1px solid ${BORDER}` }}>
+    <section className="px-6 py-12 sm:px-14 sm:py-16" style={{ background: '#0a0a0a', borderTop: `1px solid ${BORDER}` }}>
       <Lbl>Real People. Real Results.</Lbl>
       <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', color: TEXT, lineHeight: 1, marginBottom: 36 }}>
         What{' '}
         <em style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', color: ORANGE }}>Athletes</em>{' '}
         Say
       </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5">
         <TestiCard initials="JM" name="Jordan M." role="Software Engineer, New York" quote="I live in a studio in NYC. I genuinely thought that meant giving up on serious training. ApartmentAthlete proved me completely wrong." />
         <TestiCard initials="SR" name="Simone R." role="Teacher, Chicago" quote="The Silent HIIT workouts are a revelation. My downstairs neighbors have literally thanked me. I've never been in better shape." />
         <TestiCard initials="DL" name="Daniel L." role="Freelance Designer, Austin" quote="I canceled my $150/month gym six months ago. I'm stronger, more consistent, and I've saved $900. The content here is world-class." />
@@ -178,12 +179,12 @@ export function Testimonials() {
 export function Newsletter() {
   const [sent, setSent] = useState(false)
   return (
-    <section id="newsletter" style={{ background: ORANGE, padding: '64px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 48 }}>
+    <section id="newsletter" className="px-6 py-12 sm:px-14 sm:py-16 flex flex-col gap-8 md:flex-row md:items-center md:justify-between" style={{ background: ORANGE }}>
       <div>
         <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '0.02em', color: '#fff', lineHeight: 1 }}>Train Smarter.<br />Every Week.</h2>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', marginTop: 8 }}>One email. Three workouts. Zero fluff. Free forever.</p>
       </div>
-      <div style={{ display: 'flex', flexShrink: 0, minWidth: 360 }}>
+      <div className="flex w-full md:w-auto md:min-w-[360px] md:flex-shrink-0">
         <input
           placeholder={sent ? 'Check your inbox!' : 'your@email.com'}
           readOnly

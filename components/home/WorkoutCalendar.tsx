@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/AuthContext'
 import { WORKOUTS, TYPE_COLORS, getWorkout, getDaysInMonth, getFirstDay } from '@/lib/workouts'
@@ -75,7 +75,15 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
   const [selected, setSelected] = useState<number>(today.getDate())
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
   const [justLogged, setJustLogged] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const calRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const dim = getDaysInMonth(year, month)
   const first = getFirstDay(year, month)
@@ -111,16 +119,16 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       id="calendar"
       ref={calRef}
       onMouseLeave={() => { setHovered(null); setTooltip(null) }}
-      style={{ background: BG, padding: '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative' }}
+      style={{ background: BG, padding: isMobile ? '40px 16px' : '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative' }}
     >
-      <div style={{ marginBottom: 36, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <div style={{ marginBottom: 36, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 16 : 0 }}>
         <div>
           <Lbl>Training Schedule</Lbl>
           <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', color: TEXT, lineHeight: 1 }}>
             Workout of the{' '}
             <em style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', color: ORANGE }}>Day</em>
           </h2>
-          <p style={{ marginTop: 12, fontSize: 12.5, color: DIM, maxWidth: 480 }}>Hover any day to preview. Click to lock in full details.</p>
+          <p style={{ marginTop: 12, fontSize: 12.5, color: DIM, maxWidth: 480 }}>{isMobile ? 'Tap any day to preview.' : 'Hover any day to preview. Click to lock in full details.'}</p>
         </div>
         {user && streak > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px', background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)' }}>
@@ -136,7 +144,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       <div style={{ position: 'relative' }}>
         {/* {!user && <CalendarGate onOpenAuth={onOpenAuth} />} */}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start', filter: 'none', pointerEvents:'auto', userSelect:'auto'}}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap: 28, alignItems: 'start', filter: 'none', pointerEvents:'auto', userSelect:'auto'}}>
           {/* Calendar grid */}
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', borderBottom: `1px solid ${BORDER}` }}>
@@ -191,7 +199,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
           </div>
 
           {/* Side panel */}
-          <div style={{ position: 'sticky', top: 72 }}>
+          <div style={{ position: isMobile ? 'static' : 'sticky', top: 72 }}>
             <div style={{ background: SURFACE, border: `1px solid ${pc.border}`, animation: 'fadeUp 0.2s ease' }}>
               <div style={{ padding: '20px 22px', borderBottom: '1px solid #222', background: pc.bg }}>
                 <div style={{ fontSize: 8.5, letterSpacing: '0.18em', textTransform: 'uppercase', color: pc.text, fontWeight: 700, marginBottom: 6, display: 'flex', justifyContent: 'space-between' }}>

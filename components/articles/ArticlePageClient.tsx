@@ -7,6 +7,20 @@ import type { Article, ArticleSection, RatingCardProduct, WeekBlock } from '@/li
 import { ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
 import { Lbl } from '@/components/ui/primitives'
 
+// ── Mobile detection hook ─────────────────────────────────────────────────────
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [breakpoint])
+  return isMobile
+}
+
 // ── Reading progress bar ──────────────────────────────────────────────────────
 
 function ReadingProgress() {
@@ -64,6 +78,7 @@ function SaveButton({ slug }: { slug: string }) {
 
 function ExerciseBlock({ section }: { section: ArticleSection }) {
   const [open, setOpen] = useState(false)
+  const isMobile = useIsMobile()
   const levelColor: Record<string, string> = {
     Beginner: '#82d296', 'Beginner+': '#a8d86e', Intermediate: '#f2c94c',
     'Intermediate+': '#ff9f43', Advanced: '#ff6b35', Elite: ORANGE,
@@ -80,10 +95,12 @@ function ExerciseBlock({ section }: { section: ArticleSection }) {
       <div
         onClick={() => setOpen(o => !o)}
         style={{
-          padding: '18px 24px',
+          padding: isMobile ? '14px 16px' : '18px 24px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           cursor: 'pointer',
           borderLeft: `3px solid ${lc}`,
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
+          gap: isMobile ? 10 : 0,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -145,6 +162,7 @@ function Stars({ rating }: { rating: number }) {
 function RatingCard({ product, rank }: { product: RatingCardProduct; rank: number }) {
   const [open, setOpen] = useState(false)
   const [hov, setHov] = useState(false)
+  const isMobile = useIsMobile()
   return (
     <div
       onMouseEnter={() => setHov(true)}
@@ -203,7 +221,7 @@ function RatingCard({ product, rank }: { product: RatingCardProduct; rank: numbe
       {/* Expanded details */}
       {open && (
         <div style={{ padding: '0 22px 22px', borderTop: `1px solid ${BORDER}` }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16, marginBottom: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16, marginTop: 16, marginBottom: 16 }}>
             <div>
               <div style={{ fontSize: 8.5, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#82d296', fontWeight: 700, marginBottom: 8 }}>Pros</div>
               {product.pros.map((pro, i) => (
@@ -490,6 +508,7 @@ interface Props {
 
 export default function ArticlePageClient({ article, related }: Props) {
   const progressRef = useRef(0)
+  const isMobile = useIsMobile()
 
   return (
     <>
@@ -511,7 +530,7 @@ export default function ArticlePageClient({ article, related }: Props) {
         }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.6) 50%, transparent 100%)' }} />
 
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 max(56px, 8vw) 48px' }}>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: isMobile ? '0 20px 32px' : '0 max(56px, 8vw) 48px' }}>
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, fontSize: 9.5, color: DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             <Link href="/articles" style={{ color: DIM, textDecoration: 'none', transition: 'color 0.2s' }}
@@ -568,8 +587,8 @@ export default function ArticlePageClient({ article, related }: Props) {
       </div>
 
       {/* Article body */}
-      <div style={{ background: BG, padding: '0 max(56px, 8vw)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 64, paddingTop: 52, paddingBottom: 80 }}>
+      <div style={{ background: BG, padding: isMobile ? '0 20px' : '0 max(56px, 8vw)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 280px', gap: isMobile ? 0 : 64, paddingTop: 52, paddingBottom: 80 }}>
           {/* Main content */}
           <div style={{ minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 32 }}>
@@ -603,8 +622,8 @@ export default function ArticlePageClient({ article, related }: Props) {
           </div>
 
           {/* Sidebar */}
-          <aside style={{ paddingTop: 52 }}>
-            <div style={{ position: 'sticky', top: 80, display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <aside style={{ paddingTop: isMobile ? 0 : 52, paddingBottom: isMobile ? 40 : 0 }}>
+            <div style={{ position: isMobile ? 'static' : 'sticky', top: 80, display: 'flex', flexDirection: 'column', gap: 24 }}>
               {/* Quick facts */}
               <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '20px 22px' }}>
                 <div style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: ORANGE, fontWeight: 700, marginBottom: 16 }}>
@@ -657,7 +676,7 @@ export default function ArticlePageClient({ article, related }: Props) {
             <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', letterSpacing: '0.03em', color: TEXT, lineHeight: 1, marginBottom: 28 }}>
               Related Articles
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 2 }}>
               {related.map(a => <RelatedCard key={a.slug} article={a} />)}
             </div>
           </div>

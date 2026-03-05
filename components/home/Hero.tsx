@@ -16,8 +16,8 @@ export default function Hero({ onOpenAuth }: HeroProps) {
   const todayWorkout = getWorkout(new Date().getDate())
 
   return (
-    <section style={{ background: '#0a0a0a', display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 540 }}>
-      <div style={{ padding: '72px 48px 72px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <section className="grid grid-cols-1 md:grid-cols-2" style={{ background: '#0a0a0a', minHeight: 540 }}>
+      <div className="flex flex-col justify-center px-6 py-12 sm:px-14 sm:py-[72px]">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
           <span style={{ display: 'block', width: 28, height: 2, background: ORANGE, flexShrink: 0 }} />
           <Lbl style={{ marginBottom: 0 }}>Real Training For Real Spaces</Lbl>
@@ -26,7 +26,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
         <h1
           style={{
             fontFamily: 'var(--font-bebas)',
-            fontSize: 'clamp(3.5rem, 6vw, 6.5rem)',
+            fontSize: 'clamp(3rem, 10vw, 6.5rem)',
             lineHeight: 0.92,
             letterSpacing: '0.02em',
             marginBottom: 24,
@@ -71,7 +71,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
         )} */}
       </div>
 
-      <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div className="relative overflow-hidden h-64 md:h-auto">
         <div
           style={{
             position: 'absolute', inset: 0,
@@ -83,7 +83,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(232,82,26,0.18) 0%,transparent 50%)' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left,transparent,rgba(10,10,10,0.55))' }} />
 
-        <div style={{ position: 'absolute', bottom: 44, left: 36, display: 'flex', gap: 28 }}>
+        <div className="absolute bottom-6 left-6 md:bottom-11 md:left-9 flex gap-5 md:gap-7">
           {[['200+', 'No-Equip Workouts'], ['12', 'Week Programs'], ['47K', 'Athletes']].map(([num, label]) => (
             <div key={label} style={{ borderLeft: '3px solid ' + ORANGE, paddingLeft: 12 }}>
               <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 30, color: TEXT, lineHeight: 1 }}>{num}</div>
