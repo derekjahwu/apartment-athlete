@@ -121,7 +121,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       onMouseLeave={() => { setHovered(null); setTooltip(null) }}
       style={{ background: BG, padding: isMobile ? '40px 16px' : '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative' }}
     >
-      <div style={{ marginBottom: 36, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 16 : 0 }}>
+      <div id="calendar" style={{ marginBottom: 36, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 16 : 0 }}>
         <div>
           <Lbl>Training Schedule</Lbl>
           <h2 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', color: TEXT, lineHeight: 1 }}>

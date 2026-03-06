@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ORANGE, SURFACE, BORDER, TEXT } from '@/lib/constants'
 import { OBtn, Lbl } from '@/components/ui/primitives'
+import Link from 'next/link'
 
 function workoutSlug(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -98,12 +99,14 @@ export function Workouts() {
             <em style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', color: ORANGE }}>Session</em>
           </h2>
         </div>
+        <Link href="#calendar">
         <span style={{ fontSize: 10, color: ORANGE, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, cursor: 'pointer' }}>View All Workouts</span>
+        </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0.5">
-        <WorkoutCard tag="Strength" name="Full Body Blitz" meta="30 min · Intermediate · No Equipment" img="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=500&q=80&fit=crop" />
-        <WorkoutCard tag="Cardio"   name="Silent HIIT"     meta="20 min · All Levels · Neighbor-Safe"  img="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=500&q=80&fit=crop" />
-        <WorkoutCard tag="Recovery" name="Mobility Reset"  meta="15 min · Beginner · Mat Only"         img="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80&fit=crop" />
+        <WorkoutCard tag="Strength" name="Full Body Blitz" meta="30 min · Intermediate · No Equipment" img="/img/full-body-blitz.jpeg" />
+        <WorkoutCard tag="Cardio"   name="Silent HIIT"     meta="20 min · All Levels · Neighbor-Safe"  img="/img/upper-body.jpeg" />
+        <WorkoutCard tag="Recovery" name="Mobility Reset"  meta="15 min · Beginner · Mat Only"         img="/img/mobility-reset.jpeg" />
       </div>
     </section>
   )
@@ -115,14 +118,14 @@ export function FeaturedGuide() {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2" style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
       <div className="relative h-56 md:h-auto" style={{ minHeight: 'unset' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/img/aa-banner.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="hidden md:block" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right,transparent 50%,${SURFACE})` }} />
         <div className="block md:hidden" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top,${SURFACE} 0%,transparent 60%)` }} />
       </div>
       <div className="px-6 py-10 sm:px-12 sm:py-16 flex flex-col justify-center">
         <Lbl>Featured Guide</Lbl>
         <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: 24, lineHeight: 1.3, color: TEXT, marginBottom: 18 }}>
-          The Apartment Athlete Starter Kit: Build Serious Muscle Without a Single Weight
+          The Apartment Athlete Starter Kit: Build Serious Muscle With Minimal Equipment
         </h2>
         <p style={{ fontSize: 12.5, color: '#777', lineHeight: 1.75, marginBottom: 32, maxWidth: 400 }}>
           The complete framework for building real, lasting strength using nothing but your bodyweight and 6 sq ft of floor space.
