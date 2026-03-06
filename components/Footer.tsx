@@ -36,9 +36,41 @@ function SLink({ children }: { children: React.ReactNode }) {
 
 export default function Footer() {
   return (
-    <footer style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, padding: '52px 56px 32px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 44 }}>
-        <div>
+    <footer style={{ background: SURFACE, borderTop: `1px solid ${BORDER}`, padding: '52px 24px 32px' }} className="footer-root">
+      <style>{`
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
+          gap: 48px;
+          margin-bottom: 44px;
+        }
+        .footer-bottom {
+          border-top: 1px solid #222;
+          padding-top: 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        @media (max-width: 640px) {
+          .footer-root {
+            padding: 40px 20px 28px !important;
+          }
+          .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+          }
+          .footer-brand {
+            grid-column: 1 / -1;
+          }
+          .footer-bottom {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+          }
+        }
+      `}</style>
+      <div className="footer-grid">
+        <div className="footer-brand">
           <Link href="/" style={{ fontFamily: 'var(--font-bebas)', fontSize: 22, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12, display: 'block', color: TEXT, textDecoration: 'none' }}>
             Apartment<span style={{ color: ORANGE }}>Athlete</span>
           </Link>
@@ -75,7 +107,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #222', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="footer-bottom">
         <span style={{ fontSize: 10, color: DIM }}>© 2026 ApartmentAthlete. All rights reserved.</span>
         <div style={{ display: 'flex', gap: 20 }}>
           <SLink>Instagram</SLink>
