@@ -159,7 +159,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', padding: 7 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', padding: "0px" }}>
               {Array.from({ length: first }).map((_, i) => <div key={`e${i}`} style={{ aspectRatio: '1' }} />)}
               {Array.from({ length: dim }).map((_, i) => {
                 const day = i + 1
@@ -229,14 +229,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               </div>
 
               <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {/* {isCurMonth && selected === today.getDate() && (
-                  <button
-                    onClick={handleLogToday}
-                    style={{ width: '100%', padding: '12px', background: '#1a2e1a', border: `1px solid ${todayLogged || justLogged ? '#82d296' : '#2a4a2a'}`, color: '#82d296', fontSize: 9.5, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', cursor: todayLogged ? 'default' : 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                  >
-                    {justLogged ? '✓ Logged!' : todayLogged ? '✓ Completed Today' : 'Log This Workout ✓'}
-                  </button>
-                )} */}
+
                 <Link href={`/workout/${workoutSlug(pw.name)}`}     style={{
                         padding: '11px 22px',
                         background: ORANGE_HOV,
