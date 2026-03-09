@@ -119,7 +119,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
       id="calendar"
       ref={calRef}
       onMouseLeave={() => { setHovered(null); setTooltip(null) }}
-      style={{ background: BG, padding: isMobile ? '40px 16px' : '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative' }}
+      style={{ background: BG, padding: isMobile ? '40px 16px' : '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative', overflowX: 'hidden' }}
     >
       <div id="calendar" style={{ marginBottom: 36, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 16 : 0 }}>
         <div>

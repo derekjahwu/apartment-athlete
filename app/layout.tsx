@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, DM_Sans, DM_Serif_Display } from 'next/font/google'
 import { AuthProvider } from '@/lib/AuthContext'
 import AppShell from '@/components/AppShell'
+import { Analytics } from "@vercel/analytics/next"
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <AppShell>{children}</AppShell>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   )
