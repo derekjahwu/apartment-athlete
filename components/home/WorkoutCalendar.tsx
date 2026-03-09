@@ -159,7 +159,7 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
               ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', padding: "0px" }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', padding: "7px" }}>
               {Array.from({ length: first }).map((_, i) => <div key={`e${i}`} style={{ aspectRatio: '1' }} />)}
               {Array.from({ length: dim }).map((_, i) => {
                 const day = i + 1
@@ -171,11 +171,11 @@ export default function WorkoutCalendar({ onOpenAuth }: WorkoutCalendarProps) {
                 return (
                   <div
                     key={day}
-                    style={{ aspectRatio: '1', padding: 3, cursor: 'pointer' }}
+                    style={{ aspectRatio: '1', padding: 0, cursor: 'pointer' }}
                     onMouseEnter={e => handleCellEnter(e, day)}
                     onClick={() => setSelected(day)}
                   >
-                    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: isDone ? 'rgba(232,82,26,0.18)' : isSel ? c.bg : isToday ? 'rgba(232,82,26,0.08)' : 'transparent', border: isDone ? '1px solid rgba(232,82,26,0.5)' : isSel ? `1px solid ${c.border}` : isToday ? '1px solid rgba(232,82,26,0.3)' : '1px solid transparent', borderRadius: 2, transition: 'background 0.12s' }}>
+                    <div style={{ width: '10-0%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: isDone ? 'rgba(232,82,26,0.18)' : isSel ? c.bg : isToday ? 'rgba(232,82,26,0.08)' : 'transparent', border: isDone ? '1px solid rgba(232,82,26,0.5)' : isSel ? `1px solid ${c.border}` : isToday ? '1px solid rgba(232,82,26,0.3)' : '1px solid transparent', borderRadius: 2, transition: 'background 0.12s' }}>
                       <span style={{ fontSize: 11.5, color: isToday ? ORANGE : isSel ? TEXT : '#999', fontWeight: isToday ? 700 : 400, lineHeight: 1 }}>{day}</span>
                       <div style={{ width: 5, height: 5, borderRadius: '50%', background: isDone ? ORANGE : c.dot, opacity: isDone ? 1 : w.type === 'rest' ? 0.25 : 0.9 }} />
                     </div>

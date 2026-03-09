@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   title: 'ApartmentAthlete — No Gym. No Excuses.',
   description:
     'Elite-level workouts designed for 300 sq ft or 3,000. We turn your living room into a performance lab — no equipment required, zero fluff.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

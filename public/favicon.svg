@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="ApartmentAthlete favicon">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141414"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#CC3B00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+
+  <!-- Subtle orange border glow -->
+  <rect width="32" height="32" rx="7" fill="none" stroke="#FF5733" stroke-width="1" opacity="0.5"/>
+
+  <!-- ── DUMBBELL ICON (pixel-perfect at small sizes) ── -->
+
+  <!-- Left plate -->
+  <rect x="2" y="10" width="5" height="12" rx="1.5" fill="url(#plate)"/>
+
+  <!-- Left collar -->
+  <rect x="7" y="12" width="3" height="8" rx="1" fill="#FF5733"/>
+
+  <!-- Bar -->
+  <rect x="10" y="14" width="12" height="4" rx="1" fill="#2a2a2a"/>
+  <rect x="10" y="14" width="12" height="1.5" rx="0.75" fill="#3a3a3a"/>
+
+  <!-- Right collar -->
+  <rect x="22" y="12" width="3" height="8" rx="1" fill="#FF5733"/>
+
+  <!-- Right plate -->
+  <rect x="25" y="10" width="5" height="12" rx="1.5" fill="url(#plate)"/>
+
+  <!-- "AA" lettermark — shown below dumbbell at small sizes, subtle -->
+  <text
+    x="16"
+    y="29"
+    font-family="'Arial Black', Arial, sans-serif"
+    font-weight="900"
+    font-size="6"
+    text-anchor="middle"
+    letter-spacing="0.5"
+    fill="#FF5733"
+    opacity="0.9">AA</text>
+</svg>
