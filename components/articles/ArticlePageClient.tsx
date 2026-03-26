@@ -365,7 +365,11 @@ function ContentBlock({ section }: { section: ArticleSection }) {
           display: 'flex', gap: 14, alignItems: 'flex-start',
         }}>
           <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>💡</span>
-          <p style={{ fontSize: 13, color: '#d4b96a', lineHeight: 1.7, margin: 0 }}>{section.text}</p>
+          <p style={{ fontSize: 13, color: '#d4b96a', lineHeight: 1.7, margin: 0 }}>
+            {(section.text ?? '').split('\n').map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
+          </p>
         </div>
       )
     case 'list':
@@ -402,7 +406,11 @@ function ContentBlock({ section }: { section: ArticleSection }) {
           display: 'flex', gap: 14, alignItems: 'flex-start',
         }}>
           {section.icon && <span style={{ fontSize: 20, flexShrink: 0, marginTop: 1 }}>{section.icon}</span>}
-          <p style={{ fontSize: 13, color: section.color ? `${section.color}ee` : MUTED, lineHeight: 1.72, margin: 0 }}>{section.text}</p>
+          <p style={{ fontSize: 13, color: section.color ? `${section.color}ee` : MUTED, lineHeight: 1.72, margin: 0 }}>
+            {(section.text ?? '').split('\n').map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
+          </p>
         </div>
       )
 
@@ -512,7 +520,7 @@ export default function ArticlePageClient({ article, related }: Props) {
 
   return (
     <>
-      <ReadingProgress />
+      {/* <ReadingProgress /> */}
 
       {/* Hero */}
       <div style={{ position: 'relative', height: 'clamp(360px, 52vh, 580px)', overflow: 'hidden' }}>
@@ -522,12 +530,7 @@ export default function ArticlePageClient({ article, related }: Props) {
           backgroundSize: 'cover', backgroundPosition: 'center',
           filter: 'brightness(0.35)',
         }} />
-        {/* Grid texture */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'linear-gradient(rgba(232,82,26,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(232,82,26,0.06) 1px,transparent 1px)',
-          backgroundSize: '48px 48px',
-        }} />
+ 
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.6) 50%, transparent 100%)' }} />
 
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: isMobile ? '0 20px 32px' : '0 max(56px, 8vw) 48px' }}>
@@ -564,7 +567,7 @@ export default function ArticlePageClient({ article, related }: Props) {
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {/* <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%',
                 background: 'rgba(232,82,26,0.2)', border: `1px solid ${ORANGE}`,
@@ -578,7 +581,7 @@ export default function ArticlePageClient({ article, related }: Props) {
                 <div style={{ fontSize: 9.5, color: DIM }}>{article.date}</div>
               </div>
             </div>
-            <div style={{ width: 1, height: 28, background: BORDER }} />
+            <div style={{ width: 1, height: 28, background: BORDER }} /> */}
             <span style={{ fontSize: 10, color: DIM, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               ⏱ {article.readTime} read
             </span>
@@ -591,16 +594,16 @@ export default function ArticlePageClient({ article, related }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 280px', gap: isMobile ? 0 : 64, paddingTop: 52, paddingBottom: 80 }}>
           {/* Main content */}
           <div style={{ minWidth: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 32 }}>
+            {/* <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 32 }}>
               <SaveButton slug={article.slug} />
-            </div>
+            </div> */}
 
             {article.content?.map((section, i) => (
               <ContentBlock key={i} section={section} />
             ))}
 
             {/* Author bio */}
-            {article.authorBio && (
+            {/* {article.authorBio && (
               <div style={{ marginTop: 56, paddingTop: 32, borderTop: `1px solid ${BORDER}` }}>
                 <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
                   <div style={{
@@ -618,35 +621,15 @@ export default function ArticlePageClient({ article, related }: Props) {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Sidebar */}
           <aside style={{ paddingTop: isMobile ? 0 : 52, paddingBottom: isMobile ? 40 : 0 }}>
             <div style={{ position: isMobile ? 'static' : 'sticky', top: 80, display: 'flex', flexDirection: 'column', gap: 24 }}>
-              {/* Quick facts */}
-              <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '20px 22px' }}>
-                <div style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: ORANGE, fontWeight: 700, marginBottom: 16 }}>
-                  Quick Facts
-                </div>
-                {[
-                  { label: 'Author', value: article.author },
-                  { label: 'Published', value: article.date },
-                  { label: 'Read time', value: `${article.readTime} read` },
-                  { label: 'Category', value: article.tag },
-                ].map(({ label, value }) => (
-                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid #1e1e1e` }}>
-                    <span style={{ fontSize: 10.5, color: DIM }}>{label}</span>
-                    <span style={{ fontSize: 10.5, color: TEXT, textAlign: 'right', maxWidth: 140 }}>{value}</span>
-                  </div>
-                ))}
-                <div style={{ marginTop: 16 }}>
-                  <SaveButton slug={article.slug} />
-                </div>
-              </div>
 
               {/* Share */}
-              <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '20px 22px' }}>
+              {/* <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '20px 22px' }}>
                 <div style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: ORANGE, fontWeight: 700, marginBottom: 14 }}>
                   Share
                 </div>
@@ -664,7 +647,7 @@ export default function ArticlePageClient({ article, related }: Props) {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </aside>
         </div>

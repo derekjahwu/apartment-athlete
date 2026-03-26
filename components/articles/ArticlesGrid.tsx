@@ -58,7 +58,7 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
       }}
     >
       {/* Save button */}
-      <button
+      {/* <button
         onClick={e => { e.stopPropagation(); e.preventDefault(); onToggleSave(article.slug) }}
         title={isSaved ? 'Remove from saved' : 'Save article'}
         style={{
@@ -73,7 +73,7 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
         }}
       >
         {isSaved ? '★' : '☆'}
-      </button>
+      </button> */}
 
       {/* Image */}
       <div style={{
@@ -118,17 +118,17 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
       {/* Content */}
       <div style={{ padding: (featured && !isMobile) ? '32px 36px' : '22px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
         <div>
-          {isReview && article.rating && (
+          {/* {isReview && article.rating && (
             <div style={{ marginBottom: 10 }}><StarRating rating={article.rating} /></div>
-          )}
+          )} */}
           <h3 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: (featured && !isMobile) ? 19 : 14.5, lineHeight: 1.35, color: TEXT, marginBottom: 10 }}>
             {article.title}
           </h3>
-          <p style={{ fontSize: 12, color: '#777', lineHeight: 1.7, marginBottom: 16 }}>{article.excerpt}</p>
+          <p style={{ fontSize: 12, color: '#777', lineHeight: 1.7, marginBottom: 0 }}>{article.excerpt}</p>
         </div>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 14, borderTop: '1px solid #222', marginBottom: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #222', marginBottom: 12 }}>
+            {/* <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
               <div style={{ width: 27, height: 27, borderRadius: '50%', background: '#1f1f1f', border: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: ORANGE, fontWeight: 700, flexShrink: 0 }}>
                 {article.author.split(' ').map(w => w[0]).join('')}
               </div>
@@ -137,7 +137,7 @@ function ArticleCard({ article, featured, isSaved, onToggleSave }: {
                 <div style={{ fontSize: 9.5, color: DIM }}>{article.date}</div>
               </div>
             </div>
-            <span style={{ fontSize: 9.5, color: DIM, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{article.readTime}</span>
+            <span style={{ fontSize: 9.5, color: DIM, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{article.readTime}</span> */}
           </div>
           <div style={{ fontSize: 9.5, color: hov ? ORANGE : DIM, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5, transition: 'color 0.2s' }}>
             {isReview ? 'Read Full Review' : 'Read Article'}

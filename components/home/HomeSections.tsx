@@ -125,12 +125,13 @@ export function FeaturedGuide() {
       <div className="px-6 py-10 sm:px-12 sm:py-16 flex flex-col justify-center">
         <Lbl>Featured Guide</Lbl>
         <h2 style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', fontSize: 24, lineHeight: 1.3, color: TEXT, marginBottom: 18 }}>
-          The Apartment Athlete Starter Kit: Build Serious Muscle With Minimal Equipment
+          How to Turn Your Apartment Into a Full Gym
         </h2>
         <p style={{ fontSize: 12.5, color: '#777', lineHeight: 1.75, marginBottom: 32, maxWidth: 400 }}>
-          The complete framework for building real, lasting strength using nothing but your bodyweight and 6 sq ft of floor space.
+          Whether you're in a studio in Brooklyn or a one-bedroom in Austin, your space is more versatile than you think.
+
         </p>
-        <OBtn style={{ alignSelf: 'flex-start' }}>Read the Guide</OBtn>
+        <OBtn style={{ alignSelf: 'flex-start' }}><Link href="/articles/how-to-turn-your-apartment-into-a-gym">Read the Guide</Link></OBtn>
       </div>
     </section>
   )

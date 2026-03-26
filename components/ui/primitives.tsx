@@ -6,12 +6,14 @@ import { ORANGE, ORANGE_HOV, BORDER, DIM } from '@/lib/constants'
 interface OBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   outline?: boolean
   small?: boolean
+  href?: string
 }
 
 export function OBtn({ children, outline = false, small = false, style, ...props }: OBtnProps) {
   const [hov, setHov] = useState(false)
   return (
     <button
+    href="youtube.com"
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
