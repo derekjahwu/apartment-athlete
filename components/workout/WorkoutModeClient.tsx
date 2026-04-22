@@ -7,6 +7,11 @@ import type { DayWorkout, ExerciseDetail } from '@/lib/workouts'
 import { TYPE_COLORS } from '@/lib/workouts'
 import { todayKey } from '@/lib/user'
 import { ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
+import { createClient } from '@supabase/supabase-js'
+import { useSession, useUser } from '@clerk/nextjs'
+
+
+
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -176,19 +181,50 @@ function RestTimer({ seconds, onDone, onSkip }: RestTimerProps) {
 
 // ─── completion screen ────────────────────────────────────────────────────────
 
-function CompletionScreen({ workout, elapsed, onLogAndExit }: {
+function CompletionScreen({ workout, elapsed }: {
   workout: DayWorkout
   elapsed: number
-  onLogAndExit: () => void
 }) {
   const [logged, setLogged] = useState(false)
 
-  function handleLog() {
-    setLogged(true)
-    onLogAndExit()
+  //Clerk Database Logging
+   const { session } = useSession()
+
+    function createClerkSupabaseClient() {
+    return createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        async accessToken() {
+          return session?.getToken() ?? null
+        },
+      },
+    )
   }
 
+    const client = createClerkSupabaseClient()
+
+    async function logWorkout() {
+    // Insert task into the "tasks" database
+    await client.from('workout_log').insert({
+      workout_name: workout.name,
+      duration_minutes: workout.details.length,
+      workout_type: workout.type,
+      completed_at: new Date(),
+    })
+
+    
+  }
+
+   function handleLog() {
+    setLogged(true)
+    logWorkout()
+  }
+
+ 
+
   const c = TYPE_COLORS[workout.type]
+  
 
   return (
     <div style={{
@@ -431,7 +467,7 @@ function ExerciseCard({ exercise, index, isActive, isComplete, completedSets, on
 // ─── main component ───────────────────────────────────────────────────────────
 
 export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) {
-  const { user, logWorkout, openAuth } = useAuth()
+  
   const c = TYPE_COLORS[workout.type]
 
   // Workout state
@@ -460,6 +496,9 @@ export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) 
   const totalSets = workout.details.reduce((a, e) => a + e.sets, 0)
   const doneSets = completedSets.reduce((a, n) => a + n, 0)
   const progressPct = phase === 'complete' ? 100 : (doneSets / totalSets) * 100
+
+  
+
 
   function handleSetDone() {
     const ex = workout.details[activeIdx]
@@ -504,9 +543,7 @@ export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) 
     setPhase('active')
   }
 
-  function handleLogAndExit() {
-    logWorkout()
-  }
+
 
   const isToday = workout.name === workout.name // always true — placeholder for real check
 
@@ -545,7 +582,6 @@ export default function WorkoutModeClient({ workout }: { workout: DayWorkout }) 
         <CompletionScreen
           workout={workout}
           elapsed={elapsed}
-          onLogAndExit={handleLogAndExit}
         />
       )}
 

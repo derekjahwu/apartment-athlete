@@ -3,7 +3,7 @@ import { WORKOUTS } from '@/lib/workouts'
 import WorkoutModeClient from '@/components/workout/WorkoutModeClient'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -13,8 +13,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
+  const { slug } = await params
   const workout = WORKOUTS.find(
-    w => w.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === params.slug
+    w => w.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
   )
   if (!workout) return {}
   return {
@@ -23,10 +24,12 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default function WorkoutPage({ params }: Props) {
+export default async function WorkoutPage({ params }: Props) {
+  const { slug } = await params
   const workout = WORKOUTS.find(
-    w => w.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === params.slug
+    w => w.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
   )
   if (!workout) notFound()
   return <WorkoutModeClient workout={workout} />
 }
+

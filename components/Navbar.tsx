@@ -38,7 +38,7 @@ function NavLink({ href, children, active, onClick }: { href: string; children: 
 }
 
 export default function Navbar({ onOpenAuth }: NavbarProps) {
-  const { user, logout } = useAuth()
+  // const { user, logout } = useAuth()
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
