@@ -318,7 +318,7 @@ export default function WorkoutCalendar() {
         const isBelow = tooltip.placement === 'below'
         return (
           <div style={{ position: 'absolute', left: tooltip.x, top: isBelow ? tooltip.y : 'auto', bottom: isBelow ? 'auto' : `calc(100% - ${tooltip.y}px)`, transform: 'translateX(-50%)', width: 230, background: '#1f1f1f', border: `1px solid ${c.border}`, boxShadow: '0 16px 48px rgba(0,0,0,0.7)', zIndex: 60, pointerEvents: 'none', animation: 'tooltipIn 0.14s ease' }}>
-            <div style={{ position: 'absolute', left: '50%', top: isBelow ? -5 : 'auto', bottom: isBelow ? 'auto' : -5, width: 8, height: 8, background: '#1f1f1f', border: `1px solid ${c.border}`, borderBottom: isBelow ? 'none' : undefined, borderRight: isBelow ? 'none' : undefined, borderTop: isBelow ? undefined : 'none', borderLeft: isBelow ? undefined : 'none', transform: 'translateX(-50%) rotate(45deg)' }} />
+            <div style={{ position: 'absolute', left: '50%', top: isBelow ? -5 : 'auto', bottom: isBelow ? 'auto' : -5, width: 8, height: 8, background: '#1f1f1f', borderTop: isBelow ? `1px solid ${c.border}` : 'none', borderLeft: isBelow ? `1px solid ${c.border}` : 'none', borderBottom: isBelow ? 'none' : `1px solid ${c.border}`, borderRight: isBelow ? 'none' : `1px solid ${c.border}`, transform: 'translateX(-50%) rotate(45deg)' }} />
             <div style={{ padding: '13px 15px', borderBottom: `1px solid ${c.border}`, background: c.bg }}>
               <div style={{ fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: c.text, fontWeight: 700, marginBottom: 4 }}>{MONTHS[month]} {tooltip.day} · {w.type}</div>
               <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 15, letterSpacing: '0.04em', color: TEXT }}>{w.name}</div>

@@ -59,7 +59,7 @@ export default function Hero() {
               <input
                 placeholder={sent ? 'Check your inbox!' : 'your@email.com'}
                 readOnly
-                style={{ flex: 1, padding: '13px 16px', background: '#1f1f1f', border: `1px solid ${BORDER}`, borderRight: 'none', color: TEXT, fontSize: 12, outline: 'none', fontFamily: 'inherit' }}
+                style={{ flex: 1, padding: '13px 16px', background: '#1f1f1f', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, borderLeft: `1px solid ${BORDER}`, borderRight: 'none', color: TEXT, fontSize: 12, outline: 'none', fontFamily: 'inherit' }}
               />
               <OBtn
                 onClick={() => { setSent(true); setTimeout(() => setSent(false), 3000) }}

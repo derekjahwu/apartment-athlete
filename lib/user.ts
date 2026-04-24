@@ -9,17 +9,23 @@ export function todayKey(): string {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }
 
+
 export function computeStreak(workoutLog: string[]): number {
-  if (!workoutLog.length) return 0
-  const logSet = new Set(workoutLog)
-  let streak = 0
-  const today = new Date()
+  if (!workoutLog.length) return 0;
+
+  const normalize = (d) => new Date(d).toDateString();
+  const logSet = new Set(workoutLog.map((w) => normalize(w.completed_at)));
+
+  let streak = 0;
+  const today = new Date();
+
   for (let i = 0; i <= 365; i++) {
-    const d = new Date(today)
-    d.setDate(today.getDate() - i)
-    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
-    if (logSet.has(key)) streak++
-    else if (i > 0) break
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = normalize(d);
+    if (logSet.has(key)) streak++;
+    else if (i > 0) break;
   }
-  return streak
+
+  return streak;
 }

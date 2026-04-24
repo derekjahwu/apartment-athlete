@@ -210,7 +210,7 @@ function CompletionScreen({ workout, elapsed }: {
       workout_name: workout.name,
       duration_minutes: workout.details.length,
       workout_type: workout.type,
-      completed_at: new Date(),
+      completed_at: new Date().toDateString(),
     })
 
     
