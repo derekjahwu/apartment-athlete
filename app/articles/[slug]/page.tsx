@@ -4,7 +4,7 @@ import ArticlePageClient from '@/components/articles/ArticlePageClient'
 import Footer from '@/components/Footer'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -12,7 +12,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const article = ARTICLES.find(a => a.slug === params.slug)
+  const { slug } = await params
+  const article = ARTICLES.find(a => a.slug === slug)
   if (!article) return {}
   return {
     title: `${article.title} — ApartmentAthlete`,
@@ -20,8 +21,9 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default function ArticlePage({ params }: Props) {
-  const article = ARTICLES.find(a => a.slug === params.slug)
+export default async function ArticlePage({ params }: Props) {
+  const { slug } = await params
+  const article = ARTICLES.find(a => a.slug === slug)
   if (!article || !article.content) notFound()
 
   const related = ARTICLES

@@ -148,7 +148,7 @@ export default function WorkoutCalendar() {
     <section
       id="calendar"
       ref={calRef}
-      onMouseLeave={() => { setHovered(null); setTooltip(null) }}
+      onMouseLeave={() => { setTooltip(null) }}
       style={{ background: BG, padding: '64px 56px', borderTop: `1px solid ${BORDER}`, position: 'relative' }}
     >
       <div style={{ marginBottom: 36, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>

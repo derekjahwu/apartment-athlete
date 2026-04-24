@@ -222,9 +222,9 @@ export default function DashboardPage() {
   async function pastWorkouts() {
     const {data,error} = await client.from('workout_log').select()
     console.log(error)
-    setWorkoutLog(data)
-    setStreak(computeStreak(data))
-    setWeeklyCount(countWorkoutsThisWeek(data))
+    setWorkoutLog(data ?? [])
+    setStreak(computeStreak(data ?? []))
+    setWeeklyCount(countWorkoutsThisWeek(data ?? []))
   }
 pastWorkouts()
 
@@ -373,8 +373,8 @@ pastWorkouts()
       </div>
 
       {/* Saved articles */}
-      <div className="dashboard-panel" style={{ background: SURFACE, border: `1px solid ${BORDER}`, marginTop: 2 }}>
-        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
+      {/* <div className="dashboard-panel" style={{ background: SURFACE, border: `1px solid ${BORDER}`, marginTop: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div>
             <Lbl>Reading List</Lbl>
             <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 20, letterSpacing: '0.04em', color: TEXT }}>
@@ -386,7 +386,7 @@ pastWorkouts()
               Browse More →
             </Link>
           )}
-        </div> */}
+        </div>
 
          {0 === 0 ? (
           <div style={{ textAlign: 'center', padding: '44px 0', color: DIM, fontSize: 12.5 }}>
@@ -395,7 +395,7 @@ pastWorkouts()
           </div>
         ) : (
           <div className="dashboard-articles-grid">
-            {/* {savedFull.map(a => {
+            {savedFull.map(a => {
               const [hovCard, setHovCard] = useState(false)
               return (
                 <Link key={a.slug} href={`/articles/${a.slug}`} style={{ textDecoration: 'none' }}>
@@ -423,10 +423,10 @@ pastWorkouts()
                   </div>
                 </Link>
               )
-            })} */}
+            })}
           </div>
         )}
-      </div>
+      </div> */}
     </main>
   )
 }

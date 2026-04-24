@@ -10,10 +10,12 @@ export function todayKey(): string {
 }
 
 
-export function computeStreak(workoutLog: string[]): number {
+export function computeStreak(
+  workoutLog: Array<{ completed_at: string | Date }>
+): number {
   if (!workoutLog.length) return 0;
 
-  const normalize = (d) => new Date(d).toDateString();
+  const normalize = (d: string | Date) => new Date(d).toDateString();
   const logSet = new Set(workoutLog.map((w) => normalize(w.completed_at)));
 
   let streak = 0;
