@@ -13,7 +13,6 @@ export function OBtn({ children, outline = false, small = false, style, ...props
   const [hov, setHov] = useState(false)
   return (
     <button
-    href="youtube.com"
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/AuthContext'
 import { ORANGE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
 import { OBtn } from '@/components/ui/primitives'
+import { useUser, SignOutButton, SignInButton, SignUpButton, SignUp   } from '@clerk/nextjs'
 
 interface NavbarProps {
   onOpenAuth: () => void
@@ -38,12 +39,13 @@ function NavLink({ href, children, active, onClick }: { href: string; children: 
 }
 
 export default function Navbar({ onOpenAuth }: NavbarProps) {
-  const { user, logout } = useAuth()
+  // const { user, logout } = useAuth()
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+ const { isSignedIn } = useUser()
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 20) }
@@ -128,16 +130,27 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
             {/* <NavLink href="/#training" active={false}>Training</NavLink> */}
             <NavLink href="/articles" active={pathname === '/articles'}>Articles</NavLink>
 
-            {/* {user ? (
+            {isSignedIn ? (
               <div data-user-menu style={{ position: 'relative' }}>
-                ...
+                <Link href="/dashboard">
+                <OBtn small>Dashboard</OBtn>
+                </Link>
+                <SignOutButton>
+                  <OBtn outline small>Log out</OBtn>
+                </SignOutButton>
+
               </div>
             ) : (
               <div style={{ display: 'flex', gap: 8 }}>
-                <OBtn outline small onClick={onOpenAuth}>Sign In</OBtn>
-                <OBtn small onClick={onOpenAuth}>Join Free</OBtn>
+                <SignInButton>
+
+                <OBtn outline small >Sign In</OBtn>
+                </SignInButton>
+                <SignUpButton>
+                  <OBtn small>Join Free</OBtn>
+                </SignUpButton>
               </div>
-            )} */}
+            )}
           </div>
         )}
       </nav>

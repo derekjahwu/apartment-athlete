@@ -3,24 +3,51 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth } from '@/lib/AuthContext'
+// import { useAuth } from '@/lib/AuthContext'
 import { getWorkout } from '@/lib/workouts'
 import { ARTICLES } from '@/lib/articles'
 import { MONTHS, ORANGE, SURFACE, BORDER, TEXT, MUTED, DIM, BG } from '@/lib/constants'
 import { computeStreak } from '@/lib/user'
 import { Lbl, OBtn } from '@/components/ui/primitives'
+import { useSession, useUser, UserAvatar  } from '@clerk/nextjs'
+import { createClient } from '@supabase/supabase-js'
+import PastWorkouts from '../Pastworkouts'
+
+type Workout = {
+  id: number;
+  user_id: string;
+  workout_name: string;
+  duration_minutes: number;
+  workout_type: string;
+  completed_at: string;
+};
 
 // ── Streak heatmap ────────────────────────────────────────────────────────────
 
-function MiniStreakGrid({ workoutLog }: { workoutLog: string[] }) {
-  const today = new Date()
-  const logSet = new Set(workoutLog)
-  const days = Array.from({ length: 42 }, (_, i) => {
-    const d = new Date(today)
-    d.setDate(today.getDate() - (41 - i))
-    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
-    return { key, date: d, done: logSet.has(key), isToday: i === 41 }
-  })
+function MiniStreakGrid({ workoutLog = [] }: { workoutLog: Workout[] }) {
+  const today = new Date();
+
+  const logSet = new Set(
+    (workoutLog ?? []).map(w => new Date(w.completed_at).toDateString())
+  );
+
+  // First day of current month
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  // What day of the week does the month start on? (0=Sun)
+  const startPadding = monthStart.getDay();
+  // How many days in this month
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  // Total cells = padding + days in month, rounded up to full weeks
+  const totalCells = Math.ceil((startPadding + daysInMonth) / 7) * 7;
+
+  const days = Array.from({ length: totalCells }, (_, i) => {
+    const d = new Date(monthStart);
+    d.setDate(1 - startPadding + i);
+    const key = d.toDateString();
+    const isToday = key === today.toDateString();
+    const isCurrentMonth = d.getMonth() === today.getMonth();
+    return { key, date: d, done: logSet.has(key), isToday, isCurrentMonth };
+  });
 
   return (
     <div>
@@ -33,13 +60,20 @@ function MiniStreakGrid({ workoutLog }: { workoutLog: string[] }) {
         {days.map(d => (
           <div
             key={d.key}
-            title={d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            title={d.isCurrentMonth ? d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}
             style={{
               aspectRatio: '1',
-              background: d.done ? ORANGE : d.isToday ? 'rgba(232,82,26,0.15)' : '#1a1a1a',
+              background: !d.isCurrentMonth
+                ? 'transparent'
+                : d.done
+                ? ORANGE
+                : d.isToday
+                ? 'rgba(232,82,26,0.15)'
+                : '#1a1a1a',
               border: d.isToday ? `1px solid ${ORANGE}` : '1px solid transparent',
               borderRadius: 2,
               transition: 'background 0.2s',
+              opacity: d.isCurrentMonth ? 1 : 0,  // hide overflow days
             }}
           />
         ))}
@@ -143,58 +177,95 @@ function SessionRow({ workoutKey, index, onRemove }: { workoutKey: string; index
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { user, workoutLog, savedArticles, unsave, openAuth, removeWorkout } = useAuth()
   const today = new Date()
-  const streak = computeStreak(workoutLog)
   const todayWorkout = getWorkout(today.getDate())
   const [showAllSessions, setShowAllSessions] = useState(false)
+  const [workoutLog, setWorkoutLog] = useState<any[]>([])
+  const [streak, setStreak] = useState(0)
+  const [weeklyCount, setWeeklyCount] = useState(0)
+  const { user, isSignedIn } = useUser()
+
+  const { session } = useSession()
+
+  // Create a custom Supabase client that injects the Clerk session token into the request headers
+  function createClerkSupabaseClient() {
+    return createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        async accessToken() {
+          return session?.getToken() ?? null
+        },
+      },
+    )
+  }
+
+  function countWorkoutsThisWeek(workoutLog: any[]) {
+  if (!workoutLog.length) return 0;
+
+  const today = new Date();
+  const day = today.getDay(); // 0 = Sunday
+  const diff = day === 0 ? -6 : 1 - day; // Monday offset
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + diff);
+  monday.setHours(0, 0, 0, 0);
+
+  return workoutLog.filter((w) => new Date(w.completed_at) >= monday).length;
+}
+
+  // Create a `client` object for accessing Supabase data using the Clerk token
+  const client = createClerkSupabaseClient()
+
+  
 
   useEffect(() => {
-    if (user === null) {
-      const t = setTimeout(() => {
-        openAuth()
-        router.push('/')
-      }, 150)
-      return () => clearTimeout(t)
-    }
-  }, [user, router, openAuth])
+  async function pastWorkouts() {
+    const {data,error} = await client.from('workout_log').select()
+    console.log(error)
+    setWorkoutLog(data ?? [])
+    setStreak(computeStreak(data ?? []))
+    setWeeklyCount(countWorkoutsThisWeek(data ?? []))
+  }
+pastWorkouts()
 
-  const thisWeek = workoutLog.filter(key => {
-    const [y, m, d] = key.split('-').map(Number)
-    const date = new Date(y, m, d)
-    return (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7
-  }).length
+  }, [])
 
-  const savedFull = ARTICLES.filter(a => savedArticles.includes(a.slug))
-  const sortedLog = [...workoutLog].reverse()
-  const visibleLog = showAllSessions ? sortedLog : sortedLog.slice(0, 6)
+//   const thisWeek = workoutLog.filter(key => {
+//     const [y, m, d] = key.split('-').map(Number)
+//     const date = new Date(y, m, d)
+//     return (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7
+//   }).length
+
+//   const savedFull = ARTICLES.filter(a => savedArticles.includes(a.slug))
+//   const sortedLog = [...workoutLog].reverse()
+//   const visibleLog = showAllSessions ? sortedLog : sortedLog.slice(0, 6)
 
   const stats = [
-    { label: 'Current Streak',     value: `${streak} days`,    icon: '🔥', accent: ORANGE },
-    { label: 'Workouts This Week', value: `${thisWeek} / 7`,   icon: '⚡', accent: '#f2c94c' },
+    { label: 'Current Streak',     value: streak,    icon: '🔥', accent: ORANGE },
+    { label: 'Workouts This Week', value: weeklyCount,   icon: '⚡', accent: '#f2c94c' },
     { label: 'Total Workouts',     value: workoutLog.length,   icon: '✓',  accent: '#82d296' },
-    { label: 'Saved Articles',     value: savedArticles.length,icon: '★',  accent: '#58a6ff' },
+    { label: 'Saved Articles',     value: 1 ,icon: '★',  accent: '#58a6ff' },
   ]
 
-  if (!user) return null
+  if (!isSignedIn) return null
 
   return (
-    <main style={{ background: BG, minHeight: 'calc(100vh - 56px)', padding: '52px 56px 88px' }}>
+    <main className="dashboard-main" style={{ background: BG, minHeight: 'calc(100vh - 56px)' }}>
       {/* Header */}
-      <div style={{ marginBottom: 44, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <div className="dashboard-header">
         <div>
           <Lbl>Your Dashboard</Lbl>
           <h1 style={{ fontFamily: 'var(--font-bebas)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', lineHeight: 0.95, color: TEXT }}>
-            Welcome back,{' '}
+            Welcome back, {user.firstName}
             <em style={{ fontFamily: 'var(--font-dm-serif)', fontStyle: 'italic', color: ORANGE }}>
-              {user.name.split(' ')[0]}
+              {/* {user.name.split(' ')[0]} */}
             </em>
           </h1>
           <p style={{ marginTop: 12, fontSize: 12.5, color: DIM }}>
             {today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
         </div>
-        <div style={{ padding: '14px 22px', background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)', textAlign: 'right' }}>
+        <div className="dashboard-today-workout" style={{ background: 'rgba(232,82,26,0.08)', border: '1px solid rgba(232,82,26,0.25)' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: ORANGE, fontWeight: 700, marginBottom: 5 }}>
             Today&apos;s Workout
           </div>
@@ -208,9 +279,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 2, marginBottom: 2 }}>
+      <div className="dashboard-stats-grid">
         {stats.map(s => (
-          <div key={s.label} style={{ background: SURFACE, padding: '26px 24px', border: `1px solid ${BORDER}`, position: 'relative', overflow: 'hidden' }}>
+          <div key={s.label} className="dashboard-stat-card" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
             <div style={{ position: 'absolute', top: -10, right: -4, fontSize: 50, opacity: 0.07, pointerEvents: 'none' }}>{s.icon}</div>
             <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM, fontWeight: 700, marginBottom: 10 }}>{s.label}</div>
             <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 34, color: s.accent, lineHeight: 1 }}>{s.value}</div>
@@ -218,9 +289,9 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+      <div className="dashboard-content-grid">
         {/* Streak heatmap */}
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '30px' }}>
+        <div className="dashboard-panel" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
             <div>
               <Lbl>Activity Log</Lbl>
@@ -229,7 +300,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 34, color: ORANGE, lineHeight: 1 }}>{streak}</div>
+              <div style={{ fontFamily: 'var(--font-bebas)', fontSize: 34, color: ORANGE, lineHeight: 1 }}>STREAK</div>
               <div style={{ fontSize: 9, color: DIM, letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>day streak</div>
             </div>
           </div>
@@ -246,7 +317,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent sessions with remove */}
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '30px' }}>
+        <div className="dashboard-panel" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
             <div>
               <Lbl>Workout History</Lbl>
@@ -254,9 +325,9 @@ export default function DashboardPage() {
                 Recent Sessions
               </div>
             </div>
-            {workoutLog.length > 0 && (
+            {3 > 0 && (
               <span style={{ fontSize: 9.5, color: DIM, letterSpacing: '0.05em' }}>
-                {workoutLog.length} total
+                {3} total
               </span>
             )}
           </div>
@@ -269,17 +340,19 @@ export default function DashboardPage() {
           ) : (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {visibleLog.map((key, i) => (
-                  <SessionRow
-                    key={key}
-                    workoutKey={key}
-                    index={i}
-                    onRemove={removeWorkout}
-                  />
-                ))}
-              </div>
+              {workoutLog.slice().reverse().map((workout, i) => (
+                <PastWorkouts
+                  key={i}
+                  workoutTitle={workout.workout_name}
+                  date={workout.completed_at}
+                  type={workout.workout_type}
+                  duration={`${workout.duration_minutes} min`}
+                />
+              ))}
+                  
+               </div>
 
-              {sortedLog.length > 6 && (
+              {3 > 6 && (
                 <button
                   onClick={() => setShowAllSessions(s => !s)}
                   style={{
@@ -291,7 +364,7 @@ export default function DashboardPage() {
                   onMouseEnter={e => { e.currentTarget.style.borderColor = ORANGE; e.currentTarget.style.color = ORANGE }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = DIM }}
                 >
-                  {showAllSessions ? `Show Less` : `Show All ${sortedLog.length} Sessions`}
+                  {showAllSessions ? `Show Less` : `Show All ${3} Sessions`}
                 </button>
               )}
             </>
@@ -300,7 +373,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Saved articles */}
-      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: '30px', marginTop: 2 }}>
+      {/* <div className="dashboard-panel" style={{ background: SURFACE, border: `1px solid ${BORDER}`, marginTop: 2 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div>
             <Lbl>Reading List</Lbl>
@@ -315,13 +388,13 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {savedFull.length === 0 ? (
+         {0 === 0 ? (
           <div style={{ textAlign: 'center', padding: '44px 0', color: DIM, fontSize: 12.5 }}>
             No saved articles yet.<br />
             <Link href="/articles" style={{ color: ORANGE, fontSize: 11, textDecoration: 'none' }}>Browse Articles and click ★ to save.</Link>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+          <div className="dashboard-articles-grid">
             {savedFull.map(a => {
               const [hovCard, setHovCard] = useState(false)
               return (
@@ -353,7 +426,7 @@ export default function DashboardPage() {
             })}
           </div>
         )}
-      </div>
+      </div> */}
     </main>
   )
 }

@@ -192,7 +192,7 @@ export function Newsletter() {
         <input
           placeholder={sent ? 'Check your inbox!' : 'your@email.com'}
           readOnly
-          style={{ flex: 1, padding: '14px 16px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRight: 'none', color: '#fff', fontSize: 12.5, outline: 'none', fontFamily: 'inherit' }}
+          style={{ flex: 1, padding: '14px 16px', background: 'rgba(255,255,255,0.15)', borderTop: '1px solid rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.3)', borderLeft: '1px solid rgba(255,255,255,0.3)', borderRight: 'none', color: '#fff', fontSize: 12.5, outline: 'none', fontFamily: 'inherit' }}
         />
         <button
           onClick={() => { setSent(true); setTimeout(() => setSent(false), 3000) }}

@@ -1,1 +1,55 @@
-{"pages":{},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":false}
+{
+  "app": {
+    "[project]/app/_not-found/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/articles/[slug]/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/articles/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/dashboard/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/sign-in/[[...sign-in]]/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/sign-up/[[...sign-up]]/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ],
+    "[project]/app/workout/[slug]/page": [
+      "static/media/fabcf92ba1ccea36-s.p.0lwj123ije5i..woff2",
+      "static/media/5c285b27cdda1fe8-s.p.0yo6-5yoeeudq.woff2",
+      "static/media/fad69795a077455b-s.p.08-a0qexde~kr.woff2",
+      "static/media/0c8f209abc35ee02-s.p.03rqv30url-~q.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

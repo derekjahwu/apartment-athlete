@@ -4,6 +4,14 @@ import { useState } from 'react'
 import { useAuth } from '@/lib/AuthContext'
 import { OBtn, TextInput } from '@/components/ui/primitives'
 import { ORANGE, SURFACE, BORDER, DIM, TEXT } from '@/lib/constants'
+import {
+  ClerkProvider,
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from '@clerk/nextjs'
+import { Sign } from 'crypto'
 
 interface AuthModalProps {
   onClose: () => void
@@ -117,7 +125,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
         {/* OAuth */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-          {OAUTH_PROVIDERS.map(p => (
+           {OAUTH_PROVIDERS.map(p => (
             <button
               key={p.name}
               onClick={() => handleOAuth(p.name)}
@@ -205,6 +213,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           By continuing you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
+      
     </div>
   )
 }
