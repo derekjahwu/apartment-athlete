@@ -102,9 +102,7 @@ export default function WorkoutCalendar() {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
       {
-        async accessToken() {
-          return session?.getToken({ template: 'supabase' }) ?? null
-        },
+            accessToken: async () => session?.getToken() ?? null,
       },
     )
   }
