@@ -191,7 +191,7 @@ export default function DashboardPage() {
   function createClerkSupabaseClient() {
     return createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         async accessToken() {
           return session?.getToken() ?? null
@@ -244,7 +244,7 @@ pastWorkouts()
     { label: 'Current Streak',     value: streak,    icon: '🔥', accent: ORANGE },
     { label: 'Workouts This Week', value: weeklyCount,   icon: '⚡', accent: '#f2c94c' },
     { label: 'Total Workouts',     value: workoutLog.length,   icon: '✓',  accent: '#82d296' },
-    { label: 'Saved Articles',     value: 1 ,icon: '★',  accent: '#58a6ff' },
+    // { label: 'Saved Articles',     value: 1 ,icon: '★',  accent: '#58a6ff' },
   ]
 
   if (!isSignedIn) return null
